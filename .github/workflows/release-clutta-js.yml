@@ -65,24 +65,22 @@ jobs:
           esac
 
           new_version="$major.$minor.$patch"
-          echo "NEW_VERSION=v$new_version" >> $GITHUB_ENV
+          echo "NEW_VERSION=$new_version" >> $GITHUB_ENV
 
       - name: Echo the new version
         run: echo "The new version is ${{ env.NEW_VERSION }}"
 
-      # - name: Update the version in package.json
-      #   working-directory: libraries/javascript
-      #   run: |
-      #     npm version $NEW_VERSION --no-git-tag-version 
+      - name: Update the version in package.json
+        run: |
+          npm version $NEW_VERSION --no-git-tag-version 
         
-      # - name: Confirm updated package.json version 
-      #   working-directory: libraries/javascript
-      #   run: |
-      #     latest_version=$(node -p "require('./package.json').version")
-      #     echo "LATEST_VERSION=$latest_version" >> $GITHUB_ENV
+      - name: Confirm updated package.json version 
+        run: |
+          latest_version=$(node -p "require('./package.json').version")
+          echo "LATEST_VERSION=$latest_version" >> $GITHUB_ENV
 
-      # - name: Echo the updated version
-      #   run: echo "The new version is ${{ env.LATEST_VERSION }}"
+      - name: Echo the updated version
+        run: echo "The new version is ${{ env.LATEST_VERSION }}"
 
       # - name: Configure git
       #   working-directory: libraries/javascript
