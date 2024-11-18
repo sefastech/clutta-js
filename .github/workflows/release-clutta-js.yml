@@ -1,0 +1,125 @@
+name: Publish and release clutta-js
+
+on:
+  workflow_dispatch: 
+    inputs:
+        versionType:
+          description: 'Version type to increment'
+          required: true
+          type: choice
+          options:
+            - major
+            - minor
+            - patch
+          default: patch
+
+jobs:
+  build-and-publish-javascript:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      packages: write  
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@sefastech'
+      
+      - name: Install dependencies
+        working-directory: libraries/javascript
+        run: npm ci
+      
+      - name: Get current version
+        working-directory: libraries/javascript
+        run: |
+          current_version=$(node -p "require('./package.json').version")
+          echo "CURRENT_VERSION=$current_version" >> $GITHUB_ENV
+      
+      - name: Echo the current version
+        run: echo "The current version of clutta-js is ${{ env.CURRENT_VERSION }}"
+
+      # - name: Increment Javascript version
+      #   working-directory: libraries/javascript
+      #   id: increment_js_version
+      #   run: |
+      #     version="${{ env.CURRENT_VERSION }}"
+      #     IFS='.' read -r major minor patch <<< "$version" 
+
+      #     case "${{ github.event.inputs.versionType}}" in
+      #       major)
+      #         major=$((major+1))
+      #         minor=0
+      #         patch=0
+      #         ;;
+      #       minor)
+      #         minor=$((minor+1))
+      #         patch=0
+      #         ;;
+      #       patch)
+      #         patch=$((patch+1))
+      #         ;;
+      #     esac
+
+      #     new_version="$major.$minor.$patch"
+      #     echo "NEW_VERSION=$new_version" >> $GITHUB_ENV
+
+      # - name: Echo the new version
+      #   run: echo "The new version is ${{ env.NEW_VERSION }}"
+
+      # - name: Update the version in package.json
+      #   working-directory: libraries/javascript
+      #   run: |
+      #     npm version $NEW_VERSION --no-git-tag-version 
+        
+      # - name: Confirm updated package.json version 
+      #   working-directory: libraries/javascript
+      #   run: |
+      #     latest_version=$(node -p "require('./package.json').version")
+      #     echo "LATEST_VERSION=$latest_version" >> $GITHUB_ENV
+
+      # - name: Echo the updated version
+      #   run: echo "The new version is ${{ env.LATEST_VERSION }}"
+
+      # - name: Configure git
+      #   working-directory: libraries/javascript
+      #   run: |
+      #     git config --global user.name "GitHub Actions"
+      #     git config --global user.email "actions@github.com"
+        
+      # - name: Tag and Commit changes
+      #   working-directory: libraries/javascript
+      #   run: |
+      #     git add ./package.json
+      #     git add ./package-lock.json
+      #     git commit -m "Bump clutta-js version to ${{ env.NEW_VERSION }}"
+      #     echo "TAG=clutta-js-v${{env.NEW_VERSION}}" >> $GITHUB_ENV
+      #     git tag -a clutta-js-v${{env.NEW_VERSION}} -m "Release ${{ env.NEXT_VERSION }} for ${{ github.event.inputs.language }}"
+      #     git push origin HEAD --tags
+        
+      # - name: Build and Publish to GitHub Packages
+      #   working-directory: libraries/javascript
+      #   run: |
+      #     npm publish
+      #   env:
+      #     NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      # - name: Create GitHub release
+      #   if: success()
+      #   uses: actions/create-release@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     tag_name: ${{ env.TAG }}  
+      #     release_name: Release ${{ env.TAG }}
+      #     body: |
+      #       ## Changes
+      #       - Release of ${{ env.TAG }}
+      #     draft: false
+      #     prerelease: false
