@@ -82,39 +82,36 @@ jobs:
       - name: Echo the updated version
         run: echo "The new version is ${{ env.LATEST_VERSION }}"
 
-      # - name: Configure git
-      #   working-directory: libraries/javascript
-      #   run: |
-      #     git config --global user.name "GitHub Actions"
-      #     git config --global user.email "actions@github.com"
+      - name: Configure git
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
         
-      # - name: Tag and Commit changes
-      #   working-directory: libraries/javascript
-      #   run: |
-      #     git add ./package.json
-      #     git add ./package-lock.json
-      #     git commit -m "Bump clutta-js version to ${{ env.NEW_VERSION }}"
-      #     echo "TAG=clutta-js-v${{env.NEW_VERSION}}" >> $GITHUB_ENV
-      #     git tag -a clutta-js-v${{env.NEW_VERSION}} -m "Release ${{ env.NEXT_VERSION }} for ${{ github.event.inputs.language }}"
-      #     git push origin HEAD --tags
+      - name: Tag and Commit changes
+        run: |
+          git add ./package.json
+          git add ./package-lock.json
+          git commit -m "Bump clutta-js version to ${{ env.NEW_VERSION }}"
+          echo "TAG=v${{env.NEW_VERSION}}" >> $GITHUB_ENV
+          git tag -a v${{env.NEW_VERSION}} -m "Release ${{ env.NEXT_VERSION }} for clutta-js"
+          git push origin HEAD --tags
         
-      # - name: Build and Publish to GitHub Packages
-      #   working-directory: libraries/javascript
-      #   run: |
-      #     npm publish
-      #   env:
-      #     NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and Publish to GitHub Packages
+        run: |
+          npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
-      # - name: Create GitHub release
-      #   if: success()
-      #   uses: actions/create-release@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     tag_name: ${{ env.TAG }}  
-      #     release_name: Release ${{ env.TAG }}
-      #     body: |
-      #       ## Changes
-      #       - Release of ${{ env.TAG }}
-      #     draft: false
-      #     prerelease: false
+      - name: Create GitHub release
+        if: success()
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.TAG }}  
+          release_name: Release of ${{ env.TAG }}
+          body: |
+            ## Changes
+            - Release of ${{ env.TAG }}
+          draft: false
+          prerelease: false
