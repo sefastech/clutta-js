@@ -43,33 +43,32 @@ jobs:
       - name: Echo the current version
         run: echo "The current version of clutta-js is ${{ env.CURRENT_VERSION }}"
 
-      # - name: Increment Javascript version
-      #   working-directory: libraries/javascript
-      #   id: increment_js_version
-      #   run: |
-      #     version="${{ env.CURRENT_VERSION }}"
-      #     IFS='.' read -r major minor patch <<< "$version" 
+      - name: Increment Javascript version
+        id: increment_js_version
+        run: |
+          version="${{ env.CURRENT_VERSION }}"
+          IFS='.' read -r major minor patch <<< "$version" 
 
-      #     case "${{ github.event.inputs.versionType}}" in
-      #       major)
-      #         major=$((major+1))
-      #         minor=0
-      #         patch=0
-      #         ;;
-      #       minor)
-      #         minor=$((minor+1))
-      #         patch=0
-      #         ;;
-      #       patch)
-      #         patch=$((patch+1))
-      #         ;;
-      #     esac
+          case "${{ github.event.inputs.versionType}}" in
+            major)
+              major=$((major+1))
+              minor=0
+              patch=0
+              ;;
+            minor)
+              minor=$((minor+1))
+              patch=0
+              ;;
+            patch)
+              patch=$((patch+1))
+              ;;
+          esac
 
-      #     new_version="$major.$minor.$patch"
-      #     echo "NEW_VERSION=$new_version" >> $GITHUB_ENV
+          new_version="$major.$minor.$patch"
+          echo "NEW_VERSION=v$new_version" >> $GITHUB_ENV
 
-      # - name: Echo the new version
-      #   run: echo "The new version is ${{ env.NEW_VERSION }}"
+      - name: Echo the new version
+        run: echo "The new version is ${{ env.NEW_VERSION }}"
 
       # - name: Update the version in package.json
       #   working-directory: libraries/javascript
