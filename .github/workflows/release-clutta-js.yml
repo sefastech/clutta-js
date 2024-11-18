@@ -33,11 +33,9 @@ jobs:
           scope: '@sefastech'
       
       - name: Install dependencies
-        working-directory: libraries/javascript
         run: npm ci
       
       - name: Get current version
-        working-directory: libraries/javascript
         run: |
           current_version=$(node -p "require('./package.json').version")
           echo "CURRENT_VERSION=$current_version" >> $GITHUB_ENV
