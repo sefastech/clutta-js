@@ -1,0 +1,25 @@
+{
+  "name": "clutta-js",
+  "version": "0.0.0",
+  "description": "This is a client library built in Javascript to help users communicate with Clutta. It simplifies the process of setting up a clutta client and sending pulses.",
+  "main": "SyncClient.js",
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@grpc/grpc-js": "^1.12.2",
+    "@grpc/grpc-js-xds": "^1.8.0",
+    "@grpc/proto-loader": "^0.7.13",
+    "async": "^1.5.2",
+    "google-protobuf": "^3.0.0",
+    "lodash": "^4.6.1",
+    "minimist": "^1.2.0",
+    "uuid": "^10.0.0"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sefastech/clutta-js.git"
+  }
+}
