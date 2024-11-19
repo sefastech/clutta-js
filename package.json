@@ -1,6 +1,6 @@
 {
   "name": "@sefastech/clutta-js",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "This is a client library built in Javascript to help users communicate with Clutta. It simplifies the process of setting up a clutta client.",
   "main": "SyncClient.js",
   "author": "",
