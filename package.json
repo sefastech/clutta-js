@@ -1,6 +1,6 @@
 {
   "name": "@sefastech/clutta-js",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "description": "This is a client library built in Javascript to help users communicate with Clutta. It simplifies the process of setting up a clutta client and sending pulses.",
   "main": "SyncClient.js",
   "author": "",
@@ -16,7 +16,7 @@
     "uuid": "^10.0.0"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
+    "registry": "https://registry.npmjs.org/"
   },
   "repository": {
     "type": "git",
